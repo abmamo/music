@@ -1,0 +1,24 @@
+{% extends "base.html" %} {% block head %} {{ super() }}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/form.css') }}"
+/>
+{% endblock %} {% block content %}
+<div class="text-container">
+  <div class="cards-list">
+    {% for song in songs %}
+    <a href="{{ url_for('delete', id=song.id) }}">
+      <form action="{{ url_for('delete', id = song.id) }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type="submit" value="delete" />
+      </form>
+      <div class="card 3">
+        <div class="card_image">
+          <p>{{ song.name }}</p>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

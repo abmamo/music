@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% block head %}
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/main.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    {% endblock %}
+  </head>
+  <body>
+    <div id="nav" class="overlay">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
+        >&times;</a
+      >
+      <div class="overlay-content">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('cms') }}">CMS</a>
+        <a href="{{ url_for('upload') }}">Upload</a>
+        <a href="{{ url_for('signout') }}">Sign Out</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div id="navbar">
+      <span id="menu-icon" onclick="openNav()">&#9776;</span>
+      <span class="social-icons">
+        <a href="http://github.com/abmamo" class="fa fa-github"></a>
+        <a href="http://linkedin.com/in/abmamo/" class="fa fa-linkedin"></a>
+      </span>
+    </div>
+
+    <div id="content" class="container">
+      {% block content %}{% endblock %}
+    </div>
+
+    <script>
+      function openNav() {
+        document.getElementById("nav").style.width = "100%";
+      }
+
+      function closeNav() {
+        document.getElementById("nav").style.width = "0%";
+      }
+    </script>
+  </body>
+</html>

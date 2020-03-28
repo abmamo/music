@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway");
+
+input {
+  width: 50%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  font-family: "Raleway", serif;
+  font-size: 1.5em;
+  outline: none;
+}
+
+input[type="text"],
+input[type="password"] {
+  border: none;
+  border-bottom: 2px solid #713b58;
+  outline: none;
+}
+
+input[type="submit"] {
+  border: 2px solid #713b58;
+  background: #f4f4f4;
+  color: #713b58;
+  transition: 0.75s;
+}
+
+input[type="submit"]:hover {
+  cursor: pointer;
+  background: #713b58;
+  color: #f4f4f4;
+}

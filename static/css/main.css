@@ -1,0 +1,507 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat|Raleway&display=swap");
+
+/* general body stylings */
+body {
+  background-color: #f5f4f2;
+  max-width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+/* Navigation Menu */
+/* Scroll Out Overlay + Simple Navbar */
+#navbar {
+  display: flex;
+  justify-content: space-between;
+  width: 90vw;
+  overflow: hidden;
+  margin: 2.5%;
+}
+
+#menu-icon {
+  font-size: 30px;
+  cursor: pointer;
+  color: #713b58;
+  transition: 0.5s;
+}
+
+#menu-icon:hover {
+  color: #dc521d;
+}
+
+/* socials */
+.social-icons {
+  font-size: 30px;
+}
+
+.fa {
+  padding: 5px;
+  font-size: 30px;
+  width: 40px;
+  text-align: center;
+  text-decoration: none;
+}
+.fa-github,
+.fa-linkedin {
+  color: #713b58;
+}
+.fa-github:hover,
+.fa-linkedin:hover {
+  color: #dc521d;
+}
+/* The Overlay (background) */
+.overlay {
+  /* Height & width depends on how you want to reveal the overlay (see JS below) */
+  height: 100%;
+  width: 0;
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  background-color: rgb(0, 0, 0); /* Black fallback color */
+  background-color: #713b58;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  transition: 0.5s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+}
+/* Position the content inside the overlay */
+.overlay-content {
+  position: relative;
+  top: 25%; /* 25% from the top */
+  width: 100%; /* 100% width */
+  text-align: center; /* Centered text/links */
+  margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
+}
+/* The navigation links inside the overlay */
+.overlay a {
+  padding: 8px;
+  text-decoration: none;
+  font-size: 36px;
+  color: #f4f1e4;
+  display: block; /* Display block instead of inline */
+  transition: 0.3s; /* Transition effects on hover (color) */
+  font-family: "Montserrat", sans-serif;
+  text-transform: uppercase;
+}
+/* When you mouse over the navigation links, change their color */
+.overlay a:hover,
+.overlay a:focus {
+  color: #f4f1e4;
+  text-transform: lowercase;
+}
+/* Position the close button (top right corner) */
+.overlay .closebtn {
+  position: absolute;
+  top: 20px;
+  right: 45px;
+  font-size: 60px;
+}
+.overlay .closebtn:hover {
+  color: #dc521d;
+}
+
+/* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
+@media screen and (max-height: 450px) {
+  .overlay a {
+    font-size: 20px;
+  }
+  .overlay .closebtn {
+    font-size: 40px;
+    top: 15px;
+    right: 35px;
+  }
+}
+/* Container */
+.container {
+  background: transparent;
+  min-height: 75vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 0 auto;
+}
+/* home styling */
+#banner {
+  color: #333;
+  text-transform: uppercase;
+  font-size: 4vw;
+  font-weight: bold;
+  padding-top: 10em;
+  position: fixed;
+  width: 85%;
+  bottom: 45%;
+  display: block;
+  font-family: "Montserrat", serif;
+}
+
+#flip {
+  height: 50px;
+  overflow: hidden;
+}
+
+#flip > div > div {
+  color: #fff;
+  padding: 2vw 2vw;
+  height: 45px;
+  margin-bottom: 45px;
+  display: inline-block;
+  text-transform: lowercase;
+}
+
+#flip div:first-child {
+  animation: show 5s linear infinite;
+}
+
+#flip div div {
+  background: #dc521d;
+}
+#flip div:first-child div {
+  background: #d8ba27;
+}
+#flip div:last-child div {
+  background: #713b58;
+}
+
+@keyframes show {
+  0% {
+    margin-top: -270px;
+  }
+  5% {
+    margin-top: -180px;
+  }
+  33% {
+    margin-top: -180px;
+  }
+  38% {
+    margin-top: -90px;
+  }
+  66% {
+    margin-top: -90px;
+  }
+  71% {
+    margin-top: 0px;
+  }
+  99.99% {
+    margin-top: 0px;
+  }
+  100% {
+    margin-top: -270px;
+  }
+}
+
+/* about styling */
+.text-container {
+  background: transparent;
+  min-height: 100%;
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+  padding: 2.5%;
+}
+.text-underline {
+  border-bottom: 5px solid #713b58;
+}
+.text-container > h1 {
+  font-family: "Montserrat", serif;
+  color: #333;
+  text-transform: uppercase;
+  font-size: 40px;
+  font-weight: bold;
+}
+.text-container > p,
+p {
+  font-family: "Raleway", sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+}
+
+.text-container > a {
+  font-family: "Raleway", sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+}
+
+.text-container .image-container {
+  margin: 30px auto;
+  width: 500px;
+  height: 500px;
+  box-shadow: 2.5px 2.5px 15px 3.5px rgba(0, 0, 0, 0.25),
+    -2.5px -2.5px 15px 3.5px rgba(0, 0, 0, 0.22);
+  transition: 0.4s;
+  cursor: default;
+}
+
+.text-container .image-container img {
+  width: inherit;
+  height: inherit;
+  object-fit: cover;
+}
+
+.accent-text {
+  color: #713b58;
+  font-family: "Raleway", sans-serif;
+  font-weight: 200;
+}
+
+/* work styling */
+.timeline {
+  position: relative;
+  margin: 50px auto;
+  padding: 40px 0;
+  width: 85%;
+  box-sizing: border-box;
+}
+.timeline:before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 2px;
+  height: 100%;
+  background: #333;
+}
+.timeline ul {
+  padding: 0;
+  margin: 0;
+}
+.timeline ul li {
+  list-style: none;
+  position: relative;
+  width: 50%;
+  padding: 30px 40px;
+  box-sizing: border-box;
+}
+.timeline ul li:nth-child(odd) {
+  float: left;
+  text-align: right;
+  clear: both;
+}
+.timeline ul li:nth-child(even) {
+  float: right;
+  text-align: left;
+  clear: both;
+}
+.content {
+  padding-bottom: 20px;
+}
+.timeline ul li:nth-child(odd):before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: 24px;
+  right: -6px;
+  background: #713b58;
+  border-radius: 50%;
+}
+.timeline ul li:nth-child(even):before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: 24px;
+  left: -4px;
+  background: #713b58;
+  border-radius: 50%;
+}
+.timeline ul li h3 {
+  padding: 0;
+  margin: 0;
+  font-family: "Montserrat", serif;
+  font-size: 24px;
+  color: #333;
+}
+.timeline ul li p {
+  margin: 5px 0 0;
+  padding: 0;
+  font-family: "Raleway", sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+  color: #333333;
+}
+.timeline ul li p .sub-title {
+  color: #713b58;
+  font-size: 20px;
+}
+
+.timeline ul li .time h4 {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+}
+.timeline ul li:nth-child(odd) .time {
+  position: absolute;
+  top: 12px;
+  right: -165px;
+  margin: 0;
+  padding: 8px 16px;
+  background: #713b58;
+  color: #fff;
+  font-family: "Montserrat", serif;
+  font-weight: light;
+}
+.timeline ul li:nth-child(even) .time {
+  position: absolute;
+  top: 12px;
+  left: -165px;
+  margin: 0;
+  padding: 8px 16px;
+  background: #713b58;
+  color: #fff;
+  font-family: "Montserrat", serif;
+  font-weight: light;
+}
+@media (max-width: 1000px) {
+  .timeline {
+    width: 100%;
+  }
+}
+@media (max-width: 767px) {
+  .timeline {
+    width: 100%;
+    padding-bottom: 0;
+  }
+  h1 {
+    font-size: 40px;
+    text-align: center;
+  }
+  .timeline:before {
+    left: 20px;
+    height: 100%;
+  }
+  .timeline ul li:nth-child(odd),
+  .timeline ul li:nth-child(even) {
+    width: 100%;
+    text-align: left;
+    padding-left: 50px;
+    padding-bottom: 50px;
+  }
+  .timeline ul li:nth-child(odd):before,
+  .timeline ul li:nth-child(even):before {
+    top: -18px;
+    left: 16px;
+  }
+  .timeline ul li:nth-child(odd) .time,
+  .timeline ul li:nth-child(even) .time {
+    top: -30px;
+    left: 50px;
+    right: inherit;
+  }
+}
+
+/* project styling */
+.cards-list {
+  z-index: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.card-list a {
+  text-decoration: none;
+}
+
+.card {
+  margin: 30px auto;
+  width: 300px;
+  height: 300px;
+  box-shadow: 2.5px 2.5px 15px 3.5px rgba(0, 0, 0, 0.25),
+    -2.5px -2.5px 15px 3.5px rgba(0, 0, 0, 0.22);
+  transition: 0.4s;
+}
+
+.card .card_image {
+  width: inherit;
+  height: inherit;
+  background: #713b58;
+}
+
+.card:hover .card_image {
+  background: #f5f4f2;
+  color: #713b58;
+}
+
+.card .card_image img {
+  width: inherit;
+  height: inherit;
+  object-fit: cover;
+}
+
+.card .card_title {
+  text-align: center;
+  border-radius: 0px 0px 40px 40px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: bold;
+  font-size: 30px;
+  margin-top: -80px;
+  height: 40px;
+}
+
+.card .card_description {
+  text-align: center;
+  font-family: "Lora", sans-serif;
+  font-weight: 200;
+  font-size: 20px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  color: #fff;
+  visibility: hidden;
+  opacity: 0;
+
+  /* transition effect. not necessary */
+  transition: opacity 0.2s, visibility 0.2s;
+}
+
+.card .card_link {
+  text-align: center;
+  font-family: "Lora", sans-serif;
+  font-weight: 200;
+  font-size: 20px;
+  position: absolute;
+  top: 25%;
+  bottom: 10%;
+  left: 0;
+  right: 0;
+  color: #fff;
+  visibility: hidden;
+  opacity: 0;
+
+  /* transition effect. not necessary */
+  transition: opacity 0.2s, visibility 0.2s;
+}
+
+.card:hover .card_description,
+.card:hover .card_link {
+  visibility: visible;
+  opacity: 1;
+  color: #fff;
+}
+
+.card:hover {
+  transform: scale(0.9, 0.9);
+  box-shadow: 5px 5px 30px 15px rgba(0, 0, 0, 0.25),
+    -5px -5px 30px 15px rgba(0, 0, 0, 0.22);
+}
+
+.title-white {
+  color: white;
+}
+
+.title-black {
+  color: black;
+}
+
+.card:hover .title-white {
+  color: #713b58;
+}
+
+@media all and (max-width: 500px) {
+  .card-list {
+    /* On small screens, we are no longer using row direction but column */
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %} {% block head %} {{ super() }}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/form.css') }}"
+/>
+{% endblock %} {% block content %}
+<div class="text-container">
+  <h1><span class="text-underline"> SIGN UP</span></h1>
+  <form
+    action="{{ url_for('signup') }}"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    <input type="text" name="email" placeholder="email" />
+    <input type="password" name="password" placeholder="password" />
+    <input type="submit" value="submit" />
+  </form>
+</div>
+{% endblock %}
