@@ -291,21 +291,13 @@ Player.prototype = {
 
 // Setup our new audio player class and pass it the playlist.
 var player = new Player([
-  {
-    title: "Rave Digger",
-    file: "rave_digger",
-    howl: null
-  },
-  {
-    title: "80s Vibe",
-    file: "80s_vibe",
-    howl: null
-  },
-  {
-    title: "Running Out",
-    file: "running_out",
-    howl: null
-  }
+  {% for song in songs %}
+    {
+      title: {{ song.name }},
+      file: {{ song.webm_filename }},
+      howl: null
+    },
+  {% endfor %}
 ]);
 
 // Bind our player controls.

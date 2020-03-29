@@ -49,7 +49,7 @@ class Song(db.Model):
 # create all schema
 db.create_all()
 
-# configure uploads
+# configure uploads / define allowed file types
 audio = UploadSet('audio', ('mp3', 'wav', 'webm'))
 configure_uploads(app, audio)
 
@@ -61,7 +61,8 @@ def load_user(user_id):
 # define template routes
 @app.route('/', methods=['GET'])
 def home():
-    return render_template('home.html')
+    songs = Song.query.all()
+    return render_template('home.html', songs=songs)
 
 # about page route function
 @app.route('/about', methods=['GET'])
@@ -86,6 +87,7 @@ def signup():
         # add user to db
         db.session.add(new_user)
         db.session.commit()
+        db.session.close()
         # return to login
         return redirect(url_for('signin'))
     return render_template('signup.html')
@@ -123,18 +125,47 @@ def cms():
     songs = Song.query.order_by(Song.id.desc()).all()
     return render_template('cms.html', songs=songs)
 
-# delete route function
+# delete route functio
 @app.route('/delete/<int:id>', methods=['POST'])
 @login_required
 def delete(id):
     song = Song.query.filter_by(id=id).first()
-    # remove mp3 and webm files from disk
-    os.remove(app.config['BASE_DIR'] + url_for('static',
-                                               filename='audio/' + song.webm_filename))
-    os.remove(app.config['BASE_DIR'] + url_for('static',
-                                               filename='audio/' + song.mp3_filename))
+    try:
+        # remove mp3 and webm files from disk if present
+        os.remove(app.config['BASE_DIR'] + url_for('static',
+                                                   filename='audio/' + song.webm_filename))
+        os.remove(app.config['BASE_DIR'] + url_for('static',
+                                                   filename='audio/' + song.mp3_filename))
+    except:
+        pass
     # add delete from directory using song filename here
     db.session.delete(song)
+    db.session.commit()
+    db.session.close()
+    return redirect(url_for('cms'))
+
+
+@app.route('/publish/<int:id>', methods=['POST'])
+@login_required
+def publish(id):
+    # get song
+    song = Song.query.filter_by(id=id).first()
+    # set published to true
+    song.published = True
+    # commit to database
+    db.session.commit()
+    db.session.close()
+    return redirect(url_for('cms'))
+
+
+@app.route('/unpublish/<int:id>', methods=['POST'])
+@login_required
+def unpublish(id):
+    # get song
+    song = Song.query.filter_by(id=id).first()
+    # set published to true
+    song.published = False
+    # commit to database
     db.session.commit()
     db.session.close()
     return redirect(url_for('cms'))
@@ -144,7 +175,7 @@ def delete(id):
 @login_required
 def upload():
     if request.method == 'POST':
-        # get caption and file name from the form
+        # get name from the form
         name = request.form['name']
         webm_filename = audio.save(request.files['webm'])
         mp3_filename = audio.save(request.files['mp3'])

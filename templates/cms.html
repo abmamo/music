@@ -12,6 +12,14 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
         <input type="submit" value="delete" />
       </form>
+      <form action="{{ url_for('publish', id = song.id) }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type="submit" value="publish" />
+      </form>
+      <form action="{{ url_for('unpublish', id = song.id) }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type="submit" value="unpublish" />
+      </form>
       <div class="card 3">
         <div class="card_image">
           <p>{{ song.name }}</p>
