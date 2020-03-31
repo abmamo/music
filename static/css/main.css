@@ -21,8 +21,9 @@ body {
 
 #menu-icon {
   font-size: 30px;
+  left: 3%;
   cursor: pointer;
-  color: #713b58;
+  color: #f4f4f4;
   transition: 0.5s;
 }
 
@@ -37,6 +38,7 @@ body {
 
 .fa {
   padding: 5px;
+  padding-top: 3%;
   font-size: 30px;
   width: 40px;
   text-align: center;
@@ -44,11 +46,11 @@ body {
 }
 .fa-github,
 .fa-linkedin {
-  color: #713b58;
+  color: #f4f4f4;
 }
 .fa-github:hover,
 .fa-linkedin:hover {
-  color: #dc521d;
+  color: #f4f4f4;
 }
 /* The Overlay (background) */
 .overlay {
@@ -194,7 +196,7 @@ body {
 .text-container {
   background: transparent;
   min-height: 100%;
-  width: 100%;
+  width: 50%;
   text-align: center;
   margin: 0 auto;
   padding: 2.5%;
@@ -204,7 +206,7 @@ body {
 }
 .text-container > h1 {
   font-family: "Montserrat", serif;
-  color: #333;
+  color: #ede7f5;
   text-transform: uppercase;
   font-size: 40px;
   font-weight: bold;
@@ -214,6 +216,7 @@ p {
   font-family: "Raleway", sans-serif;
   font-weight: 300;
   font-size: 20px;
+  color: #ede7f5;
 }
 
 .text-container > a {
@@ -239,116 +242,7 @@ p {
 }
 
 .accent-text {
-  color: #713b58;
+  color: #f4f4f4;
   font-family: "Raleway", sans-serif;
   font-weight: 200;
-}
-
-/* project styling */
-.cards-list {
-  z-index: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-}
-
-.card-list a {
-  text-decoration: none;
-}
-
-.card {
-  margin: 30px auto;
-  width: 300px;
-  height: 100px;
-}
-
-.card .card_image {
-  width: inherit;
-  height: inherit;
-  background: #713b58;
-}
-
-.card .card_image img {
-  width: inherit;
-  height: inherit;
-  object-fit: cover;
-}
-
-.card .card_title {
-  text-align: center;
-  border-radius: 0px 0px 40px 40px;
-  font-family: "Montserrat", sans-serif;
-  font-weight: bold;
-  font-size: 40px;
-  margin-top: -80px;
-  height: 40px;
-}
-
-.card .card_description {
-  text-align: center;
-  font-family: "Lora", sans-serif;
-  font-weight: 200;
-  font-size: 30px;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  color: #fff;
-  visibility: hidden;
-  opacity: 0;
-
-  /* transition effect. not necessary */
-  transition: opacity 0.2s, visibility 0.2s;
-}
-
-.card .card_link {
-  text-align: center;
-  font-family: "Lora", sans-serif;
-  font-weight: 200;
-  font-size: 20px;
-  position: absolute;
-  top: 25%;
-  bottom: 10%;
-  left: 0;
-  right: 0;
-  color: #fff;
-  visibility: hidden;
-  opacity: 0;
-
-  /* transition effect. not necessary */
-  transition: opacity 0.2s, visibility 0.2s;
-}
-
-.card:hover .card_description,
-.card:hover .card_link {
-  visibility: visible;
-  opacity: 1;
-  color: #fff;
-}
-
-.card:hover {
-  transform: scale(0.9, 0.9);
-  box-shadow: 5px 5px 30px 15px rgba(0, 0, 0, 0.25),
-    -5px -5px 30px 15px rgba(0, 0, 0, 0.22);
-}
-
-.title-white {
-  color: white;
-}
-
-.title-black {
-  color: black;
-}
-
-.card:hover .title-white {
-  color: #713b58;
-}
-
-@media all and (max-width: 500px) {
-  .card-list {
-    /* On small screens, we are no longer using row direction but column */
-    flex-direction: column;
-  }
 }
