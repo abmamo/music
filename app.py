@@ -153,23 +153,23 @@ def cms():
 @app.route('/delete/<int:id>', methods=['POST'])
 @login_required
 def delete(id):
-    try:
-        song = Song.query.filter_by(id=id).first()
-        try:
-            # remove mp3 and webm files from disk if present
-            os.remove(app.config['BASE_DIR'] + url_for('static',
-                                                       filename='audio/' + song.webm_filename))
-            os.remove(app.config['BASE_DIR'] + url_for('static',
-                                                       filename='audio/' + song.mp3_filename))
-        except:
-            abort(500)
-        # add delete from directory using song filename here
-        db.session.delete(song)
-        db.session.commit()
-        db.session.close()
-        return redirect(url_for('cms'))
-    except:
-        abort(500)
+    # try:
+    song = Song.query.filter_by(id=id).first()
+    # try:
+    # remove mp3 and webm files from disk if present
+    os.remove(app.config['BASE_DIR'] + url_for('static',
+                                               filename='audio/' + song.webm_filename))
+    os.remove(app.config['BASE_DIR'] + url_for('static',
+                                               filename='audio/' + song.mp3_filename))
+    # except:
+    # abort(500)
+    # add delete from directory using song filename here
+    db.session.delete(song)
+    db.session.commit()
+    db.session.close()
+    return redirect(url_for('cms'))
+    # except:
+    # abort(500)
 
 
 @app.route('/publish/<int:id>', methods=['POST'])
