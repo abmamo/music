@@ -20,11 +20,7 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
         <input type="submit" value="unpublish" />
       </form>
-      <div class="card 3">
-        <div class="card_image">
-          <p>{{ song.name }}</p>
-        </div>
-      </div>
+      <p>{{ song.name }}</p>
     </a>
     {% endfor %}
   </div>

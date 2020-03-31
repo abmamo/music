@@ -15,11 +15,12 @@ input[type="password"] {
   border: none;
   border-bottom: 2px solid #713b58;
   outline: none;
+  background: #ede7f5;
 }
 
 input[type="submit"] {
   border: 2px solid #713b58;
-  background: #f4f4f4;
+  background: #ede7f5;
   color: #713b58;
   transition: 0.75s;
 }
@@ -27,5 +28,5 @@ input[type="submit"] {
 input[type="submit"]:hover {
   cursor: pointer;
   background: #713b58;
-  color: #f4f4f4;
+  color: #ede7f5;
 }
