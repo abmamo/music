@@ -54,6 +54,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
+    confirmed = db.Column(db.Boolean, default=False)
 
 
 class Song(db.Model):
@@ -99,30 +100,62 @@ def about():
 # AUTHENTICATION
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    # try:
+    if request.method == 'POST':
+        # get data from from submitted
+        email = request.form['email']
+        password = request.form['password']
+        # check to see if email exists
+        user = User.query.filter_by(email=email).first()
+        if user:
+            flash('The email address already exists.')
+            return redirect(url_for('signup'))
+        # create new user
+        new_user = User(email=email, password=generate_password_hash(
+            password, method='sha256'))
+        # add user to db
+        db.session.add(new_user)
+        db.session.commit()
+        db.session.close()
+        # prepare email
+        subject = "Confirm your email address"
+        # generate token
+        token = ts.dumps(email, salt='email-confirm-key')
+        # build recover url
+        confirm_url = url_for(
+            'confirm_email',
+            token=token,
+            _external=True)
+        # send the email
+        send_mail(subject, app.config['MAIL_USERNAME'],
+                  [email], confirm_url)
+        # update user
+        flash('Account created. Confirm your email.')
+        # return to login
+        return redirect(url_for('signin'))
+    return render_template('signup.html')
+    # except:
+    # abort(500)
+
+
+@app.route('/confirm/<token>', methods=['GET', 'POST'])
+def confirm_email(token):
+    # check validity of token passed using the serializer
     try:
-        if request.method == 'POST':
-            # get data from from submitted
-            email = request.form['email']
-            password = request.form['password']
-            # check to see if email exists
-            user = User.query.filter_by(email=email).first()
-            if user:
-                flash('The email address already exists.')
-                return redirect(url_for('signup'))
-            # create new user
-            new_user = User(email=email, password=generate_password_hash(
-                password, method='sha256'))
-            # add user to db
-            db.session.add(new_user)
-            db.session.commit()
-            db.session.close()
-            # update user
-            flash('Account successfully created.')
-            # return to login
-            return redirect(url_for('signin'))
-        return render_template('signup.html')
+        email = ts.loads(token, salt="email-confirm-key", max_age=86400)
     except:
-        abort(500)
+        abort(400)
+
+    # get the user using the email
+    user = User.query.filter_by(email=email).first_or_404()
+    # confirm user
+    user.confirmed = True
+    # save changes in database
+    db.session.commit()
+    db.session.close()
+    # alert user
+    flash("Email address confirmed.")
+    return redirect(url_for('signin'))
 
 
 @app.route('/signin', methods=['GET', 'POST'])
