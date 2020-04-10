@@ -1,6 +1,6 @@
 import os
 # import flask dependencies
-from flask import Flask, redirect, render_template, request, url_for, abort
+from flask import Flask, redirect, render_template, request, url_for, abort, flash
 # import to save filename securely
 from werkzeug.utils import secure_filename
 # import sqlalchemy for user db management
@@ -91,6 +91,7 @@ def signup():
             # check to see if email exists
             user = User.query.filter_by(email=email).first()
             if user:
+                flash('The email address already exists.')
                 return redirect(url_for('signup'))
             # create new user
             new_user = User(email=email, password=generate_password_hash(
@@ -99,6 +100,8 @@ def signup():
             db.session.add(new_user)
             db.session.commit()
             db.session.close()
+            # update user
+            flash('Account successfully created.')
             # return to login
             return redirect(url_for('signin'))
         return render_template('signup.html')
@@ -117,10 +120,12 @@ def signin():
             user = User.query.filter_by(email=email).first()
             # check credentials
             if not user or not check_password_hash(user.password, password):
+                flash('Invalid credentials.')
                 return redirect(url_for('signin'))
             # login user using the manager
             login_user(user)
             # redirect to upload page
+            flash('Logged in.')
             return redirect(url_for('cms'))
         return render_template('signin.html')
     except:
@@ -130,6 +135,8 @@ def signin():
 @app.route('/signout')
 def signout():
     try:
+        # alert user
+        flash('Signed out.')
         # sign out currently logged unser & redirect
         logout_user()
         return redirect(url_for('home'))
@@ -167,6 +174,8 @@ def delete(id):
         db.session.delete(song)
         db.session.commit()
         db.session.close()
+        # update user
+        flash('Song deleted.')
         return redirect(url_for('cms'))
     except:
         abort(500)
@@ -183,6 +192,7 @@ def publish(id):
         # commit to database
         db.session.commit()
         db.session.close()
+        flash('Song published.')
         return redirect(url_for('cms'))
     except:
         abort(500)
@@ -199,6 +209,7 @@ def unpublish(id):
         # commit to database
         db.session.commit()
         db.session.close()
+        flash('Song unpublished.')
         return redirect(url_for('cms'))
     except:
         abort(500)
@@ -225,6 +236,8 @@ def upload():
             db.session.add(song)
             db.session.commit()
             db.session.close()
+            # alert user
+            flash('Song uploaded.')
             return redirect(url_for('cms'))
         return render_template('upload.html')
     except:
