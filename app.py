@@ -9,10 +9,14 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 # import csrf protection
 from flask_wtf.csrf import CSRFProtect
+# import mail manager
+from flask_mail import Mail, Message
 # import login manager
 from flask_login import LoginManager, login_user, login_required, UserMixin, logout_user
 # import image upload library
 from flask_uploads import UploadSet, configure_uploads
+# import serializer for generating tokens
+from itsdangerous import URLSafeTimedSerializer
 
 # define app
 app = Flask(__name__)
@@ -27,9 +31,21 @@ login_manager.init_app(app)
 csrf = CSRFProtect(app)
 # initialize db
 db = SQLAlchemy(app)
+# initialize mail
+mail = Mail(app)
 # configure uploads / define allowed file types
 audio = UploadSet('audio', ('mp3', 'wav', 'webm'))
 configure_uploads(app, audio)
+# initialize serializer with the app secret key
+ts = URLSafeTimedSerializer(app.config["SECRET_KEY"])
+
+# define mail sending app
+
+
+def send_mail(subject, sender, recipients, text_body):
+    msg = Message(subject, sender=sender, recipients=recipients)
+    msg.body = text_body
+    mail.send(msg)
 
 # define user and song schema
 
@@ -130,6 +146,55 @@ def signin():
         return render_template('signin.html')
     except:
         abort(500)
+
+
+@app.route('/reset', methods=['GET', 'POST'])
+def request_reset():
+    if request.method == 'POST':
+        # get email from form
+        email = request.form['email']
+        # query user by emeail
+        user = User.query.filter_by(email=email).first()
+        # prepare email
+        subject = "Password reset requested"
+        # generate token
+        token = ts.dumps(user.email, salt='recover-key')
+        # build recover url
+        recover_url = url_for(
+            'reset_with_token',
+            token=token,
+            _external=True)
+        # send the email
+        send_mail(subject, app.config['MAIL_USERNAME'],
+                  [email], recover_url)
+        # alert user
+        flash("Reset link sent.")
+        return redirect(url_for('home'))
+    return render_template('request_reset.html')
+
+
+@app.route('/reset/<token>', methods=['GET', 'POST'])
+def reset_with_token(token):
+    # check validity of token passed using the serializer
+    try:
+        email = ts.loads(token, salt="recover-key", max_age=86400)
+    except:
+        abort(400)
+    # change password if valid token provided
+    if request.method == 'POST':
+        # get new password from form
+        password = request.form['password']
+        # get user using email
+        user = User.query.filter_by(email=email).first_or_404()
+        # set hashed password in database
+        user.password = generate_password_hash(password, method='sha256')
+        # save changes in database
+        db.session.commit()
+        db.session.close()
+        # alert user
+        flash("Password successfully reset.")
+        return redirect(url_for('signin'))
+    return render_template('reset_with_token.html', token=token)
 
 
 @app.route('/signout')

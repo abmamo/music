@@ -20,6 +20,7 @@ body {
 }
 
 #menu-icon {
+  position: absolute;
   font-size: 30px;
   left: 3%;
   cursor: pointer;
@@ -260,7 +261,7 @@ p {
   position: fixed; /* Sit on top of the screen */
   z-index: 1; /* Add a z-index if needed */
   left: 50%; /* Center the snackbar */
-  bottom: 30px; /* 30px from the bottom */
+  top: 30px; /* 30px from the bottom */
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
 }
 
