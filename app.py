@@ -56,6 +56,16 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(100))
     confirmed = db.Column(db.Boolean, default=False)
 
+    def __init__(self, email, password, confirmed=False):
+        self.email = email
+        self.password = generate_password_hash(password)
+
+    def update_password(self, new_password):
+        self.password = generate_password_hash(new_password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+
 
 class Song(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -100,42 +110,46 @@ def about():
 # AUTHENTICATION
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    # try:
-    if request.method == 'POST':
-        # get data from from submitted
-        email = request.form['email']
-        password = request.form['password']
-        # check to see if email exists
-        user = User.query.filter_by(email=email).first()
-        if user:
-            flash('The email address already exists.')
-            return redirect(url_for('signup'))
-        # create new user
-        new_user = User(email=email, password=generate_password_hash(
-            password, method='sha256'))
-        # add user to db
-        db.session.add(new_user)
-        db.session.commit()
-        db.session.close()
-        # prepare email
-        subject = "Confirm your email address"
-        # generate token
-        token = ts.dumps(email, salt='email-confirm-key')
-        # build recover url
-        confirm_url = url_for(
-            'confirm_email',
-            token=token,
-            _external=True)
-        # send the email
-        send_mail(subject, app.config['MAIL_USERNAME'],
-                  [email], confirm_url)
-        # update user
-        flash('Account created. Confirm your email.')
-        # return to login
+    try:
+        if app.config['MAX_USERS_NOT_REACHED']:
+            if request.method == 'POST':
+                # get data from from submitted
+                email = request.form['email']
+                password = request.form['password']
+                # check to see if email exists
+                user = User.query.filter_by(email=email).first()
+                if user:
+                    flash('The email address already exists.')
+                    return redirect(url_for('signup'))
+                # create new user
+                new_user = User(email=email, password=password)
+                # add user to db
+                db.session.add(new_user)
+                db.session.commit()
+                db.session.close()
+                # prepare email
+                subject = "Confirm your email address"
+                # generate token
+                token = ts.dumps(email, salt='email-confirm-key')
+                # build recover url
+                confirm_url = url_for(
+                    'confirm_email',
+                    token=token,
+                    _external=True)
+                # send the email
+                send_mail(subject, app.config['MAIL_USERNAME'],
+                          [email], confirm_url)
+                # update user
+                flash('Account created. Confirm your email.')
+                # update user count
+                app.config['MAX_USERS_NOT_REACHED'] = False
+                # return to login
+                return redirect(url_for('signin'))
+            return render_template('signup.html')
+        flash('Maximum number of users exceeded.')
         return redirect(url_for('signin'))
-    return render_template('signup.html')
-    # except:
-    # abort(500)
+    except:
+        abort(500)
 
 
 @app.route('/confirm/<token>', methods=['GET', 'POST'])
@@ -146,16 +160,19 @@ def confirm_email(token):
     except:
         abort(400)
 
-    # get the user using the email
-    user = User.query.filter_by(email=email).first_or_404()
-    # confirm user
-    user.confirmed = True
-    # save changes in database
-    db.session.commit()
-    db.session.close()
-    # alert user
-    flash("Email address confirmed.")
-    return redirect(url_for('signin'))
+    try:
+        # get the user using the email
+        user = User.query.filter_by(email=email).first_or_404()
+        # confirm user
+        user.confirmed = True
+        # save changes in database
+        db.session.commit()
+        db.session.close()
+        # alert user
+        flash("Email address confirmed.")
+        return redirect(url_for('signin'))
+    except:
+        abort(500)
 
 
 @app.route('/signin', methods=['GET', 'POST'])
@@ -168,7 +185,7 @@ def signin():
             # query by email
             user = User.query.filter_by(email=email).first()
             # check credentials
-            if not user or not check_password_hash(user.password, password):
+            if not user or not user.check_password(password):
                 flash('Invalid credentials.')
                 return redirect(url_for('signin'))
             # login user using the manager
@@ -183,27 +200,30 @@ def signin():
 
 @app.route('/reset', methods=['GET', 'POST'])
 def request_reset():
-    if request.method == 'POST':
-        # get email from form
-        email = request.form['email']
-        # query user by emeail
-        user = User.query.filter_by(email=email).first()
-        # prepare email
-        subject = "Password reset requested"
-        # generate token
-        token = ts.dumps(user.email, salt='recover-key')
-        # build recover url
-        recover_url = url_for(
-            'reset_with_token',
-            token=token,
-            _external=True)
-        # send the email
-        send_mail(subject, app.config['MAIL_USERNAME'],
-                  [email], recover_url)
-        # alert user
-        flash("Reset link sent.")
-        return redirect(url_for('home'))
-    return render_template('request_reset.html')
+    try:
+        if request.method == 'POST':
+            # get email from form
+            email = request.form['email']
+            # query user by emeail
+            user = User.query.filter_by(email=email).first()
+            # prepare email
+            subject = "Password reset requested"
+            # generate token
+            token = ts.dumps(user.email, salt='recover-key')
+            # build recover url
+            recover_url = url_for(
+                'reset_with_token',
+                token=token,
+                _external=True)
+            # send the email
+            send_mail(subject, app.config['MAIL_USERNAME'],
+                      [email], recover_url)
+            # alert user
+            flash("Reset link sent.")
+            return redirect(url_for('home'))
+        return render_template('request_reset.html')
+    except:
+        abort(500)
 
 
 @app.route('/reset/<token>', methods=['GET', 'POST'])
@@ -220,7 +240,7 @@ def reset_with_token(token):
         # get user using email
         user = User.query.filter_by(email=email).first_or_404()
         # set hashed password in database
-        user.password = generate_password_hash(password, method='sha256')
+        user.update_password(password)
         # save changes in database
         db.session.commit()
         db.session.close()
