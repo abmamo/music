@@ -101,39 +101,44 @@ def about():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     # try:
-    if request.method == 'POST':
-        # get data from from submitted
-        email = request.form['email']
-        password = request.form['password']
-        # check to see if email exists
-        user = User.query.filter_by(email=email).first()
-        if user:
-            flash('The email address already exists.')
-            return redirect(url_for('signup'))
-        # create new user
-        new_user = User(email=email, password=generate_password_hash(
-            password, method='sha256'))
-        # add user to db
-        db.session.add(new_user)
-        db.session.commit()
-        db.session.close()
-        # prepare email
-        subject = "Confirm your email address"
-        # generate token
-        token = ts.dumps(email, salt='email-confirm-key')
-        # build recover url
-        confirm_url = url_for(
-            'confirm_email',
-            token=token,
-            _external=True)
-        # send the email
-        send_mail(subject, app.config['MAIL_USERNAME'],
-                  [email], confirm_url)
-        # update user
-        flash('Account created. Confirm your email.')
-        # return to login
-        return redirect(url_for('signin'))
-    return render_template('signup.html')
+    if app.config['MAX_USERS_NOT_REACHED']:
+        if request.method == 'POST':
+            # get data from from submitted
+            email = request.form['email']
+            password = request.form['password']
+            # check to see if email exists
+            user = User.query.filter_by(email=email).first()
+            if user:
+                flash('The email address already exists.')
+                return redirect(url_for('signup'))
+            # create new user
+            new_user = User(email=email, password=generate_password_hash(
+                password, method='sha256'))
+            # add user to db
+            db.session.add(new_user)
+            db.session.commit()
+            db.session.close()
+            # prepare email
+            subject = "Confirm your email address"
+            # generate token
+            token = ts.dumps(email, salt='email-confirm-key')
+            # build recover url
+            confirm_url = url_for(
+                'confirm_email',
+                token=token,
+                _external=True)
+            # send the email
+            send_mail(subject, app.config['MAIL_USERNAME'],
+                      [email], confirm_url)
+            # update user
+            flash('Account created. Confirm your email.')
+            # update user count
+            app.config['MAX_USERS_NOT_REACHED'] = False
+            # return to login
+            return redirect(url_for('signin'))
+        return render_template('signup.html')
+    flash('Maximum number of users exceeded.')
+    return redirect(url_for('signin'))
     # except:
     # abort(500)
 
