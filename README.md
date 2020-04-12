@@ -23,14 +23,19 @@ To successfully run this application there are 3 prerequisites:  python3, a vali
    ```
    pip install -r requirements.txt
    ```
-5. Run the application. It will open in your browser at 127.0.0.1
+5. Configure mail settings to be able to utilize account confirmation and password reset services by setting
+   ```
+   MAIL_USERNAME = 'YOUR GMAIL EMAIL ADDRESS HERE'
+   MAIL_PASSWORD = 'YOUR GMAIL PASSWORD HERE'
+   ```
+6. Run the application. It will open in your browser at 127.0.0.1
    ```
    python wsgi.py
    ```
-6. Head over to http://localhost:5000/signup to create an account
-7. Once you sign up a confirmation email will be sent to the email account used for signup. Once you confirm your account you will be redirected to the signin page.
-8. Once you sign in if you head over to http://localhost:5000/upload you fill be presented with a form with 3 fields: the song name field, the mp3 file upload field, and the webm file upload field.
-9. After the upload completes the application will redirect you to http://localhost:5000/cms where you can publish, unpublish, or delete the song. Only after a song is published is it accessible by the music player.
+7. Head over to http://localhost:5000/signup to create an account. An email will be sent to your account to activate your account.
+8. Once you sign up a confirmation email will be sent to the email account used for signup. Once you confirm your account you will be redirected to the signin page.
+9. Once you sign in if you head over to http://localhost:5000/upload you fill be presented with a form with 3 fields: the song name field, the mp3 file upload field, and the webm file upload field.
+10. After the upload completes the application will redirect you to http://localhost:5000/cms where you can publish, unpublish, or delete the song. Only after a song is published is it accessible by the music player.
 
 ## Technical Overview
 
