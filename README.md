@@ -1,35 +1,45 @@
 # music
 
-As a developer it is easy to fall/be put in a box of someone who spends their majority of time writing abstract code. I am passionate about pushing the boundaries of development and exploring activities, hobbies, and projects that combine coding and other disciplines. This is a music player web application built using Flask + HowlerJS + SQLite. It is a music player with a content management system for uploading and removing songs.
+A music player web application built using Flask + HowlerJS + SQLite. The appliciation is primarily divided into three parts: user facing music player, user authentication and authorization, and song management.  
 
 ## Quickstart
 
-The application was built using Flask and needs python installed to work. To run the application:
+To successfully run this application there are 3 prerequisites:  python3, a valid gmail address to send account confirmation and recovery emails which is stored locally, and the dependencies listed in the requirements.txt file. To run the application:
 
-1. Create a virtual environment
+1. Clone the repo
    ```
+   git clone git@github.com:abmamo/music.git
+   ```
+2. Navigate into the directory and create a python virtual environment
+   ```
+   cd music &&
    python3 -m venv env
    ```
-2. Install all the requirements listed in the requirements file
+3. Activate the virtual environment
+   ```
+   source env/bin/activate
+   ```
+4. Install all the dependencies listed in the requirements file
    ```
    pip install -r requirements.txt
    ```
-3. Run the application. It will open in your browser at 127.0.0.1
+5. Run the application. It will open in your browser at 127.0.0.1
    ```
    python wsgi.py
    ```
-4. Head over to http://localhost:5000/signup to create an account
-5. Once you sign up a confirmation email will be sent to the email account used for signup. Once you confirm your account you will be redirected to the signin page.
-6. Once you sign in if you head over to http://localhost:5000/upload you fill be presented with a form with 3 fields: the song name field, the mp3 file upload field, and the webm file upload field.
-7. After the upload completes the application will redirect you to http://localhost:5000/cms where you can publish, unpublish, or delete the song. Only after a song is published is it accessible by the music player.
+6. Head over to http://localhost:5000/signup to create an account
+7. Once you sign up a confirmation email will be sent to the email account used for signup. Once you confirm your account you will be redirected to the signin page.
+8. Once you sign in if you head over to http://localhost:5000/upload you fill be presented with a form with 3 fields: the song name field, the mp3 file upload field, and the webm file upload field.
+9. After the upload completes the application will redirect you to http://localhost:5000/cms where you can publish, unpublish, or delete the song. Only after a song is published is it accessible by the music player.
 
-
-## Technical Overview:
-
-The web server is built using Flask. It is roughly divided into three components: the music player, the song management dashboard, and auth components. 
+## Technical Overview
 
 The music player is built using HowlerJS, vanilla JavaScript and CSS. It has volume control, seeking, next/previous and all the things you want in a music player implemented. It needs both .webm and .mp3 files to be able to function. It is built in JavaScript and CSS.
 
-The song management dashboard and auth components on the other hand are built using HTML/CSS on the frontend and SQLite + SQLAlchemy + Flask for the backend. The user uploads a given song which is saved in a database. The database keeps a record of the song ID, the song Name, the song mp3 and webm files and a boolean field published to check if a given song has been published. The name of the song in addition to the location of the audio files on disk is saved in the database. The javascript music player is then passed a list of song SQLAlchemy objects from which it gets the audio files and the song names. Due to variety of filenames that can be uploaded to servers they are currently sanitized using secure_filename. 
+The web server is built using Flask and is divided into three components. The views serving the music player, the song management, and user handling. Since the music player is primarily built using HowlerJS and CSS it only needs the server to get a published list of songs and the rest of the work is handled on the front end. The user handling routes allow users to signup, signin, signout, reset password, and confirm their email accounts while the song management routes handle song upload, publication, and deletion. The server does this by utilizing SQLAlchemy to store information in a locally stored SQLite database.
 
-When a person publishes a song it modifies the published field of the song object and makes it visible to the music player. If a person deletes a song first the files associated with that song are deleted and then the entry for that song in the database itself deleted.
+There are two SQLAlchemy classes for interfacing with the database: the user class and the song class. The user class has the fields id, email, password and confirmed while the song class has id, name, webm_filename, mp3_filename, webm_url, and published.
+
+When a user signs up, they are assigned a unique id and their email and password is stored in the database and the confirmed field set to False. Once they confirm their email account the confirmed field will be set to True. Similarly, when a user uploads a song the .webm and .mp3 files are saved to disk and their filenames and location on disk in addition to the name of the song are stored in the database. By default all uploaded songs have the published field set to False.
+
+
