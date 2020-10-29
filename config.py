@@ -1,48 +1,73 @@
+from dotenv import load_dotenv
 # Statement for enabling the development environment
 import os
-DEBUG = True
+# load env
+load_dotenv()
 
-# Define the application directory
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+class Config:
+    # blog name
+    APP_NAME = "yared.io"
+    # app dir
+    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+    DATABASE_CONNECT_OPTIONS = {}
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    # application threads. a common general assumption is
+    # using 2 per available processor cores - to handle
+    # incoming requests using one and performing background
+    # operations using the other.
+    THREADS_PER_PAGE = 2
+    # Enable protection agains *Cross-site Request Forgery (CSRF)*
+    CSRF_ENABLED = True
+    # Use a secure, unique and absolutely secret key for
+    # signing the data.
+    CSRF_SESSION_KEY = os.urandom(64)
+    # Secret key for signing cookies
+    SECRET_KEY = os.urandom(64)
+    # Uploads
+    # UPLOADS_DEFAULT_DEST = BASE_DIR + 'app/static/audio/'
+    UPLOADS_DEFAULT_DEST = os.path.join(BASE_DIR, "static/audio/")
+    UPLOADS_DEFAULT_URL = os.environ.get("DOMAIN") + "/static/"
+    # UPLOADED_IMAGES_DEST = os.path.join(BASE_DIR, '/app/static/images/')
+    UPLOADS_AUDIO_DEST = os.path.join(BASE_DIR, "static/audio/")
+    UPLOADED_AUDIO_URL = os.environ.get("DOMAIN") + "/static/"
+    # email configuration
+    MAIL_SERVER = os.environ.get("MAIL_SERVER")
+    MAIL_PORT = 465
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
+    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
+    # server name
+    
+    SERVER_NAME = os.environ.get("SERVER_NAME")
+    SESSION_COOKIE_DOMAIN = os.environ.get("SERVER_NAME")
+    DOMAIN = os.environ.get("DOMAIN")
 
-# Define the database - we are working with
-# SQLite for this example
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'music.db')
-DATABASE_CONNECT_OPTIONS = {}
-SQLALCHEMY_TRACK_MODIFICATIONS = False
+class TestingConfig(Config):
+    # db 
+    SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(Config.BASE_DIR, "music.test.db")
+    DEBUG = True
+    TESTING = True
+    WTF_CSRF_ENABLED = False
+    CSRF_ENABLED = False
+    # set max users
+    USER_EMAIL = "test@test.com"
+    USER_PASSWORD = "testpassword"
 
-# Application threads. A common general assumption is
-# using 2 per available processor cores - to handle
-# incoming requests using one and performing background
-# operations using the other.
-THREADS_PER_PAGE = 2
+class DevelopmentConfig(Config):
+    # db 
+    SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(Config.BASE_DIR, "music.dev.db")
+    DEBUG = True
+    TESTING = True
+    # set max users
+    USER_EMAIL = os.environ.get("USER_EMAIL")
+    USER_PASSWORD = os.environ.get("USER_PASSWORD")
 
-# Enable protection agains *Cross-site Request Forgery (CSRF)*
-CSRF_ENABLED = False
-WTF_CSRF_ENABLED = False
 
-# Use a secure, unique and absolutely secret key for
-# signing the data.
-CSRF_SESSION_KEY = "secret"
-
-# Secret key for signing cookies
-SECRET_KEY = "secret"
-
-# Uploads
-#UPLOADS_DEFAULT_DEST = BASE_DIR + 'app/static/images/'
-UPLOADS_DEFAULT_DEST = "./app/static/images/"
-UPLOADS_DEFAULT_URL = 'http://localhost:5000/static/images/'
-
-#UPLOADED_IMAGES_DEST = os.path.join(BASE_DIR, '/app/static/images/')
-UPLOADS_IMAGES_DEST = "./app/static/images/"
-UPLOADED_IMAGES_URL = 'http://localhost:5000/static/images/'
-
-# email configuration
-MAIL_SERVER = 'smtp.googlemail.com'
-MAIL_PORT = 465
-MAIL_USE_TLS = False
-MAIL_USE_SSL = True
-MAIL_USERNAME = 'YOUR GMAIL EMAIL ADDRESS HERE'
-MAIL_PASSWORD = 'YOUR GMAIL PASSWORD HERE'
-# set max users
-MAX_USERS_NOT_REACHED = True
+class ProductionConfig(Config):
+    # db
+    SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(Config.BASE_DIR, "music.db")
+    DEBUG = False
+    # set max users
+    USER_EMAIL = os.environ.get("USER_EMAIL")
+    USER_PASSWORD = os.environ.get("USER_PASSWORD")

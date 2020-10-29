@@ -1,79 +1,75 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    {% block head %}
-    <meta charset="utf-8" />
-    <meta name="viewport" content="user-scalable=no" />
-    <title>music</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/main.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/styles.css')}}"
-    />
-    {% endblock %}
-  </head>
-  <body>
-    <div id="nav" class="overlay">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
-        >&times;</a
-      >
-      <div class="overlay-content">
-        <a href="{{ url_for('home') }}">Home</a>
-        <a href="{{ url_for('about') }}">About</a>
-        {% if current_user.is_authenticated %}
-        <a href="{{ url_for('cms') }}">CMS</a>
-        <a href="{{ url_for('upload') }}">Upload</a>
-        <a href="{{ url_for('signout') }}">Sign Out</a>
-        {% endif %}
-      </div>
-    </div>
 
-    <div id="navbar">
-      <span id="menu-icon" onclick="openNav()">&#9776;</span>
-    </div>
+<head>
+  {% block head %}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="user-scalable=no" />
+  <title>music</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css')}}" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  {% endblock %}
+</head>
 
-    <div id="content" class="container">
-      <div id="snackbar">
-        {% with messages = get_flashed_messages() %} {% if messages %} {% for
+<body>
+  <div id="nav" class="overlay">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <div class="overlay-content">
+      <a href="{{ url_for('player_bp.home') }}">Home</a>
+      <a href="{{ url_for('player_bp.about') }}">About</a>
+      {% if not current_user.is_authenticated %}
+      <a href="{{ url_for('player_bp.signin') }}">Sign In</a>
+      {% endif %}
+      {% if current_user.is_authenticated %}
+      <a href="{{ url_for('player_bp.cms') }}">CMS</a>
+      <a href="{{ url_for('player_bp.upload') }}">Upload</a>
+      <a href="{{ url_for('player_bp.signout') }}">Sign Out</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div id="navbar">
+    <span id="menu-icon" onclick="openNav()">&#9776;</span>
+  </div>
+
+  <div id="content" class="container">
+    <div id="snackbar">
+      {% with messages = get_flashed_messages() %} {% if messages %} {% for
         message in messages %} {{ message }} {% endfor %} {% endif %} {% endwith
         %}
-      </div>
-      {% block content %}{% endblock %}
     </div>
+    {% block content %}{% endblock %}
+  </div>
 
-    <script>
-      function openNav() {
-        document.getElementById("nav").style.width = "100%";
-      }
+  <script>
+    function openNav() {
+      document.getElementById("nav").style.width = "100%";
+    }
 
-      function closeNav() {
-        document.getElementById("nav").style.width = "0%";
-      }
-    </script>
-    {% with messages = get_flashed_messages() %} {% if messages %} {% for
+    function closeNav() {
+      document.getElementById("nav").style.width = "0%";
+    }
+  </script>
+  {% with messages = get_flashed_messages() %} {% if messages %} {% for
     message in messages %} {% if message is defined and message|length %}
-    <script>
-      function showAlert() {
-        // Get the snackbar DIV
-        var x = document.getElementById("snackbar");
+  <script>
+    function showAlert() {
+      // Get the snackbar DIV
+      var x = document.getElementById("snackbar");
 
-        // Add the "show" class to DIV
-        x.className = "show";
+      // Add the "show" class to DIV
+      x.className = "show";
 
-        // After 3 seconds, remove the show class from DIV
-        setTimeout(function () {
-          x.className = x.className.replace("show", "");
-        }, 3000);
-      }
-      window.onload = showAlert;
-    </script>
-    {% endif %} {% endfor %} {% endif %} {% endwith %}
-  </body>
+      // After 3 seconds, remove the show class from DIV
+      setTimeout(function () {
+        x.className = x.className.replace("show", "");
+      }, 3000);
+    }
+    window.onload = showAlert;
+  </script>
+  {% endif %} {% endfor %} {% endif %} {% endwith %}
+</body>
+
 </html>

@@ -1,16 +1,14 @@
-@import url("https://fonts.googleapis.com/css?family=Montserrat|Raleway&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap');
 
 /* general body stylings */
 body {
-  background-color: #f5f4f2;
+  background-color: #ffffff;
   max-width: 100vw;
   min-height: 100vh;
-  overflow-x: hidden;
-  overflow-y: scroll;
 }
 
-/* Navigation Menu */
-/* Scroll Out Overlay + Simple Navbar */
+/* nav */
 #navbar {
   display: flex;
   justify-content: space-between;
@@ -24,86 +22,66 @@ body {
   font-size: 30px;
   left: 3%;
   cursor: pointer;
-  color: #f4f4f4;
+  color: #ffffff;
   transition: 0.5s;
 }
 
 #menu-icon:hover {
-  color: #dc521d;
+  color: #000000;
 }
 
-/* socials */
-.social-icons {
-  font-size: 30px;
-}
-
-.fa {
-  padding: 5px;
-  padding-top: 3%;
-  font-size: 30px;
-  width: 40px;
-  text-align: center;
-  text-decoration: none;
-}
-.fa-github,
-.fa-linkedin {
-  color: #f4f4f4;
-}
-.fa-github:hover,
-.fa-linkedin:hover {
-  color: #f4f4f4;
-}
-/* The Overlay (background) */
 .overlay {
-  /* Height & width depends on how you want to reveal the overlay (see JS below) */
   height: 100%;
   width: 0;
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  position: fixed; 
+  z-index: 1; 
   left: 0;
   top: 0;
-  background-color: rgb(0, 0, 0); /* Black fallback color */
-  background-color: #713b58;
-  overflow-x: hidden; /* Disable horizontal scroll */
-  transition: 0.5s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+  background-color: rgb(0, 0, 0); 
+  background-color: #ffffff;
+  overflow-x: hidden; 
+  transition: 0.75s; 
 }
-/* Position the content inside the overlay */
+
 .overlay-content {
   position: relative;
-  top: 25%; /* 25% from the top */
-  width: 100%; /* 100% width */
-  text-align: center; /* Centered text/links */
-  margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
+  top: 25%; 
+  width: 100%; 
+  text-align: center; 
+  margin-top: 30px;
 }
-/* The navigation links inside the overlay */
+
 .overlay a {
-  padding: 8px;
+  padding: 10px;
   text-decoration: none;
   font-size: 36px;
-  color: #f4f1e4;
-  display: block; /* Display block instead of inline */
-  transition: 0.3s; /* Transition effects on hover (color) */
-  font-family: "Montserrat", sans-serif;
+  color: #000000;
+  display: block; 
+  transition: 0.3s; 
+  font-family: "Poppins", sans-serif;
   text-transform: uppercase;
+  border-bottom: 5px solid #EEB21B;
 }
-/* When you mouse over the navigation links, change their color */
+
 .overlay a:hover,
 .overlay a:focus {
-  color: #f4f1e4;
+  color: #000000;
   text-transform: lowercase;
+  border-color: #000000;
 }
-/* Position the close button (top right corner) */
+
 .overlay .closebtn {
   position: absolute;
   top: 20px;
   right: 45px;
   font-size: 60px;
+  border: none;
 }
 .overlay .closebtn:hover {
-  color: #dc521d;
+  color: #EEB21B;
 }
 
-/* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
+
 @media screen and (max-height: 450px) {
   .overlay a {
     font-size: 20px;
@@ -114,7 +92,8 @@ body {
     right: 35px;
   }
 }
-/* Container */
+
+/* container */
 .container {
   background: transparent;
   min-height: 75vh;
@@ -124,106 +103,59 @@ body {
   text-align: center;
   margin: 0 auto;
 }
-/* home styling */
-#banner {
-  color: #333;
-  text-transform: uppercase;
-  font-size: 4vw;
-  font-weight: bold;
-  padding-top: 10em;
-  position: fixed;
-  width: 85%;
-  bottom: 45%;
-  display: block;
-  font-family: "Montserrat", serif;
+
+/* icons */
+.material-icons {
+  display: inline-flex;
+  vertical-align: sub;
+  font-weight: bold !important;
+  transition: 0.3s all !important;
 }
 
-#flip {
-  height: 50px;
-  overflow: hidden;
+
+.fa-github-square {
+  color: #000000;
+  transition: 0.5s all;
 }
 
-#flip > div > div {
-  color: #fff;
-  padding: 2vw 2vw;
-  height: 45px;
-  margin-bottom: 45px;
-  display: inline-block;
-  text-transform: lowercase;
+.fa-github-square:hover {
+  color: #EEB21B;
+  border: none;
 }
 
-#flip div:first-child {
-  animation: show 5s linear infinite;
-}
 
-#flip div div {
-  background: #dc521d;
-}
-#flip div:first-child div {
-  background: #d8ba27;
-}
-#flip div:last-child div {
-  background: #713b58;
-}
-
-@keyframes show {
-  0% {
-    margin-top: -270px;
-  }
-  5% {
-    margin-top: -180px;
-  }
-  33% {
-    margin-top: -180px;
-  }
-  38% {
-    margin-top: -90px;
-  }
-  66% {
-    margin-top: -90px;
-  }
-  71% {
-    margin-top: 0px;
-  }
-  99.99% {
-    margin-top: 0px;
-  }
-  100% {
-    margin-top: -270px;
-  }
-}
-
-/* about styling */
+/* box  */
 .text-container {
-  background: transparent;
+  background: #ffffff;
   min-height: 100%;
   width: 50%;
   text-align: center;
   margin: 0 auto;
-  padding: 2.5%;
+  padding: 5%;
 }
 .text-underline {
-  border-bottom: 5px solid #713b58;
+  border-bottom: 5px solid #000000;
+  font-family: "Source Code Pro", sans-serif;
 }
 .text-container > h1 {
-  font-family: "Montserrat", serif;
-  color: #ede7f5;
+  font-family: "Source Code Pro", serif;
+  color: #000000;
   text-transform: uppercase;
-  font-size: 40px;
+  font-size: 36;
   font-weight: bold;
 }
 .text-container > p,
 p {
-  font-family: "Raleway", sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 300;
   font-size: 20px;
-  color: #ede7f5;
+  color: #000000;
 }
 
 .text-container > a {
-  font-family: "Raleway", sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 300;
-  font-size: 20px;
+  font-size: 36px;
 }
 
 .text-container .image-container {
@@ -244,7 +176,7 @@ p {
 
 .accent-text {
   color: #f4f4f4;
-  font-family: "Raleway", sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 200;
 }
 
@@ -253,8 +185,9 @@ p {
   visibility: hidden; /* Hidden by default. Visible on click */
   min-width: 250px; /* Set a default minimum width */
   margin-left: -125px; /* Divide value of min-width by 2 */
-  background-color: #f4f4f4; /* Black background color */
-  color: #713b58; /* White text color */
+  background-color: #ffffff; /* Black background color */
+  padding: 10px;
+  color: #000000; /* White text color */
   text-align: center; /* Centered text */
   border-radius: 2px; /* Rounded borders */
   padding: 16px; /* Padding */
@@ -262,7 +195,8 @@ p {
   z-index: 1; /* Add a z-index if needed */
   left: 50%; /* Center the snackbar */
   top: 30px; /* 30px from the bottom */
-  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  font-family: "Poppins", sans-serif;
+  font-size: 20px;
 }
 
 /* Show the snackbar when clicking on a button (class added with JavaScript) */
