@@ -9,3 +9,4 @@ flask-wtf
 werkzeug==0.16.0
 python-dotenv
 python-slugify
+uwsgi
