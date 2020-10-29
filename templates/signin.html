@@ -5,9 +5,15 @@
   <h1><span class="text-underline"> SIGN IN </span></h1>
   <form action="{{ url_for('player_bp.signin') }}" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-    <input type="text" name="email" placeholder="email" />
-    <input type="password" name="password" placeholder="password" />
-    <input type="submit" value="log in" />
+    <div class="row">
+      <input type="text" name="email" placeholder="email" />
+    </div>
+    <div class="row">
+      <input type="password" name="password" placeholder="password" />
+    </div>
+    <div class="row">
+      <input type="submit" value="log in" />
+    </div>
     <div class="row center-align">
       <a href="{{ url_for('player_bp.reset') }}" class="center-align link">
         <span><i class="material-icons">add_box</i> FORGOT

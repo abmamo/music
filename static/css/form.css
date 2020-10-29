@@ -2,13 +2,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap');
 
 input {
-  width: 50%;
   padding: 12px 20px;
   margin: 8px 0;
   box-sizing: border-box;
   font-family: "Poppins", serif;
   font-size: 1.5em;
   outline: none;
+  max-width: 90%;
 }
 
 input[type="text"],
@@ -22,14 +22,14 @@ input[type="password"] {
 input[type="submit"] {
   border: 5px solid #000000;
   background: #ffffff;
-  color: #EEB21B;
+  color: #000000;
   transition: 0.5s;
 }
 
 input[type="submit"]:hover {
   cursor: pointer;
-  background: #EEB21B;
-  color: #000000;
+  background: #000000;
+  color: #ffffff;
 }
 
 .link {
@@ -55,4 +55,5 @@ input[type="submit"]:hover {
   padding: 8px;
   font-family: "Source Code Pro", monospace;
   font-weight: 500;
+  max-width: 50%;
 }

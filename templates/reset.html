@@ -5,8 +5,16 @@
   <h1><span class="text-underline"> RESET PASSWORD </span></h1>
   <form action="{{ url_for('player_bp.reset') }}" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-    <input type="text" name="email" placeholder="email" />
-    <input type="submit" value="reset" />
+    <div class="row">
+      <input type="text" name="email" placeholder="email" />
+    </div>
+    <div class="row">
+      <input type="submit" value="reset" />
+    </div>
+    <div class="row center-align">
+      <a href="{{ url_for('player_bp.home') }}" class="center-align link">
+        <span><i class="material-icons">home</i> HOME </span></a>
+    </div>
   </form>
 </div>
 {% endblock %}

@@ -19,7 +19,7 @@ def home():
         # get published songs
         songs = Song.query.filter_by(published=True).all()
         # render player
-        return render_template('home.html', songs=songs)
+        return render_template('player.html', songs=songs)
     except:
         abort(500)
 
