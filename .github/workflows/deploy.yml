@@ -1,4 +1,4 @@
-name: teret
+name: yared
 
 on: [push, pull_request]
 
