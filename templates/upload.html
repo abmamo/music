@@ -6,8 +6,8 @@
   <form action="{{ url_for('player_bp.upload') }}" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
     <input type="text" name="name" placeholder="name" />
-    <p>mp3: </p><input type="file" name="mp3" placeholder="mp3" />
-    <p>webm: </p><input type="file" name="webm" placeholder="webm" />
+    <p class="form-label">mp3: </p><input type="file" name="mp3" placeholder="mp3" />
+    <p class="form-label">webm: </p><input type="file" name="webm" placeholder="webm" />
     <input type="submit" value="upload" />
   </form>
 </div>

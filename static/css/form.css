@@ -49,3 +49,10 @@ input[type="submit"]:hover {
   font-weight: bold !important;
   transition: 0.3s all !important;
 }
+
+.form-label {
+  border: 2px solid #000000;
+  padding: 8px;
+  font-family: "Source Code Pro", monospace;
+  font-weight: 500;
+}
