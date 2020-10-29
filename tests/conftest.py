@@ -1,33 +1,26 @@
+import os
 import pytest
-from app import app, db, User
-
 
 @pytest.fixture(scope='module')
-def test_client():
-    # expose wekzeug client
-    testing_client = app.test_client()
-    # establish application context
-    ctx = app.app_context()
-    ctx.push()
-    # testing happens
-    yield testing_client
-
-    ctx.pop()
+def test_app():
+    from app import app as test_app
+    yield test_app
+    # if test db exists delete
+    if os.path.exists(os.path.join(test_app.config["BASE_DIR"], "teret.test.db")):
+        # get base dir
+        os.remove(os.path.join(test_app.config["BASE_DIR"], "teret.test.db"))
 
 
-@pytest.fixture(scope='module')
-def init_database():
-    # create database tables
-    db.create_all()
-    # insert user data
-    user_one = User('test_one@test.com', 'testonepassword')
-    user_two = User('test_two@test.com', 'testtwopassword')
-    # add users to database
-    db.session.add(user_one)
-    db.session.add(user_two)
-    # commit changes
-    db.session.commit()
-    # test
-    yield db
-    # drop all tables created
-    db.drop_all()
+
+@pytest.fixture(scope="module")
+def test_db(test_app):
+    # with app context
+    with test_app.app_context():
+        # import db extension
+        from app.extensions import db as test_db
+        # create database tables
+        test_db.create_all()
+        # yield session
+        yield test_db
+        # drop all tables created
+        test_db.drop_all()
