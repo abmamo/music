@@ -1,4 +1,4 @@
-# music [![Build Status](https://travis-ci.org/abmamo/music.svg?branch=master)](https://travis-ci.org/abmamo/music)
+# music [![Actions Status](https://github.com/abmamo/music/workflows/music/badge.svg)](https://github.com/abmamo/music/actions)
 
 A music player web application built using Flask + HowlerJS + SQLite. The appliciation is primarily divided into three parts: user facing music player, user authentication and authorization, and song management.  
 
