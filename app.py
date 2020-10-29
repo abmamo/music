@@ -1,6 +1,6 @@
 import os
 # import flask dependencies
-from flask import Flask
+from flask import Flask, abort
 # import sqlalchemy for user db management
 from flask_sqlalchemy import SQLAlchemy
 # import csrf protection
