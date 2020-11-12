@@ -1,4 +1,4 @@
-name: yared
+name: deploy
 
 on: [push, pull_request]
 

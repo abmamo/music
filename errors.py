@@ -6,11 +6,11 @@ from flask_wtf.csrf import CSRFError
 errors_bp = Blueprint('errors_bp',
                __name__,
                template_folder='templates',
-               static_folder='static',)
+               static_folder='static')
                
 
 @errors_bp.app_errorhandler(400)
-def not_found(error):
+def bad_request(error):
     # error code
     status_code = 400
     # return error page
@@ -28,6 +28,17 @@ def not_found(error):
         render_template("error.html", message=str(error), status_code=status_code),
         404,
     )
+
+@errors_bp.app_errorhandler(405)
+def forbidden(error):
+    # error code
+    status_code = 405
+    # return error page
+    return (
+        render_template("error.html", message=str(error), status_code=status_code),
+        404,
+    )
+
 
 @errors_bp.app_errorhandler(500)
 def server_error(error):
